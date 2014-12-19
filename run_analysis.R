@@ -52,7 +52,10 @@ cleanedNames <- gsub("^t", "time", cleanedNames)
 cleanedNames <- gsub("^f", "freq", cleanedNames)
 cleanedNames <- gsub("\\(\\)", "", cleanedNames)
 names(data) <- cleanedNames
-
+rm(cleanedNames)
 
 ## Step 5
 tidyData <- aggregate(x=data[,3:68], by=list(data$subjectID, data$activity), FUN = mean)
+names(tidyData)[1:2] <- c("subjectID", "activity")
+
+write.table(x = tidyData, "tidyData.txt", row.name=F)
