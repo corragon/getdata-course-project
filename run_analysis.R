@@ -56,6 +56,8 @@ rm(cleanedNames)
 
 ## Step 5
 tidyData <- aggregate(x=data[,3:68], by=list(data$subjectID, data$activity), FUN = mean)
+names(tidyData) <- paste(names(tidyData), "-ave", sep="")
 names(tidyData)[1:2] <- c("subjectID", "activity")
 
 write.table(x = tidyData, "tidyData.txt", row.name=F)
+
