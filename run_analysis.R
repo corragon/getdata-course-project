@@ -51,6 +51,7 @@ cleanedNames <- features$V2[columnsToExtract]
 cleanedNames <- gsub("^t", "time", cleanedNames)
 cleanedNames <- gsub("^f", "freq", cleanedNames)
 cleanedNames <- gsub("\\(\\)", "", cleanedNames)
+cleanedNames <- gsub("BodyBody", "Body", cleanedNames)
 names(data) <- cleanedNames
 rm(cleanedNames)
 
