@@ -13,18 +13,15 @@ train <- cbind(subject_train, activity_train, train)
 rm(subject_test, activity_test, subject_train, activity_train)
 
 
-
 ## Step 1: Merge sets into one
 data <- rbind(train, test)
-dataNames <- names(data)
 data <- data[order(data$subjectID),]
 
 # Cleanup from step 1
 rm(train, test)
 
 
-
-# Step 2: Extract only mean() and std() measurements
+## Step 2: Extract only mean() and std() measurements
 features <- read.table("data/features.txt",
                        colClasses=c("numeric", "character"))
 # We want to make sure our added columns are included in the pattern match
@@ -38,7 +35,7 @@ columnsToExtract <- grep("(mean|std|subject|activity)(?!F)", features$V2, perl=T
 data <- data[,columnsToExtract]
 
 
-# Step 3
+## Step 3
 activityLevels <- read.table("data/activity_labels.txt")
 
 data$activity <- factor(data$activity)
@@ -51,13 +48,14 @@ cleanedNames <- features$V2[columnsToExtract]
 cleanedNames <- gsub("^t", "time", cleanedNames)
 cleanedNames <- gsub("^f", "freq", cleanedNames)
 cleanedNames <- gsub("\\(\\)", "", cleanedNames)
+cleanedNames <- gsub("\\-", ".", cleanedNames)
 cleanedNames <- gsub("BodyBody", "Body", cleanedNames)
 names(data) <- cleanedNames
 rm(cleanedNames)
 
 ## Step 5
 tidyData <- aggregate(x=data[,3:68], by=list(data$subjectID, data$activity), FUN = mean)
-names(tidyData) <- paste(names(tidyData), "-ave", sep="")
+names(tidyData) <- paste(names(tidyData), ".ave", sep="")
 names(tidyData)[1:2] <- c("subjectID", "activity")
 
 write.table(x = tidyData, "tidyData.txt", row.name=F)
